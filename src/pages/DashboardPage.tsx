@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import MainLayout from '@/components/layouts/MainLayout';
 import { useScheduler } from '@/contexts/SchedulerContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -12,11 +13,12 @@ import { Badge } from '@/components/ui/badge';
 import { CalendarCheck, Plus, User, Clock } from 'lucide-react';
 
 const DashboardPage: React.FC = () => {
+  const navigate = useNavigate();
   const { user } = useAuth();
   const { appointments, professionals, services } = useScheduler();
   const [date, setDate] = useState<Date>(new Date());
   const [showNewAppointmentDialog, setShowNewAppointmentDialog] = useState(false);
-  const [selectedProfessionalId, setSelectedProfessionalId] = useState<string>("");
+  const [selectedProfessionalId, setSelectedProfessionalId] = useState<string>("all");
   
   // Filter appointments for the selected day
   const todaysAppointments = appointments.filter(appointment => {
@@ -81,7 +83,7 @@ const DashboardPage: React.FC = () => {
                     <SelectValue placeholder="Selecione um profissional" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Todos os profissionais</SelectItem>
+                    <SelectItem value="all">Todos os profissionais</SelectItem>
                     {availableProfessionals.map(professional => (
                       <SelectItem key={professional.id} value={professional.id}>
                         {professionals.find(p => p.id === professional.id)?.user?.name || 'Profissional'}
@@ -95,7 +97,7 @@ const DashboardPage: React.FC = () => {
                   mode="single"
                   selected={date}
                   onSelect={(newDate) => newDate && setDate(newDate)}
-                  className="rounded-md border"
+                  className="rounded-md border pointer-events-auto"
                 />
               </div>
             </div>
@@ -110,7 +112,7 @@ const DashboardPage: React.FC = () => {
               ) : (
                 <div className="space-y-3">
                   {todaysAppointments
-                    .filter(app => selectedProfessionalId ? app.professionalId === selectedProfessionalId : true)
+                    .filter(app => selectedProfessionalId === "all" ? true : app.professionalId === selectedProfessionalId)
                     .sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime())
                     .map(appointment => {
                       const professional = professionals.find(p => p.id === appointment.professionalId);
