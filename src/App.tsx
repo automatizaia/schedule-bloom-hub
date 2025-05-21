@@ -10,6 +10,8 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import NewAppointmentPage from "./pages/NewAppointmentPage";
 import PublicBookingPage from "./pages/PublicBookingPage";
+import ClientsPage from "./pages/ClientsPage";
+import ProfessionalsPage from "./pages/ProfessionalsPage";
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -32,6 +34,8 @@ const App = () => (
               <Route element={<PrivateRoute />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
                 <Route path="/schedule/new" element={<NewAppointmentPage />} />
+                <Route path="/clients" element={<ClientsPage />} />
+                <Route path="/professionals" element={<ProfessionalsPage />} />
               </Route>
               
               {/* Redirect Root to Dashboard or Login */}
