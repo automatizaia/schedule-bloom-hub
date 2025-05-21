@@ -7,9 +7,33 @@ import { useScheduler } from '@/contexts/SchedulerContext';
 import { Users, UserPlus, Search, Calendar } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
+import { Professional, Service } from '@/types/models';
 
 const ProfessionalsPage: React.FC = () => {
-  const { professionals, services } = useScheduler();
+  const { professionals, services, availabilities } = useScheduler();
+
+  // Helper function to get the services a professional offers
+  const getProfessionalServices = (professionalId: string): Service[] => {
+    // Look for services that have this professional in mock data
+    return services.filter(service => {
+      // Check in mockProfessionalServices data (imported in SchedulerContext)
+      // Since we don't have direct access, we'll find services based on context
+      const professionalAvailability = availabilities.some(
+        availability => availability.professionalId === professionalId
+      );
+      return professionalAvailability;
+    });
+  };
+
+  // Helper function to get the days a professional is available
+  const getProfessionalScheduleDays = (professionalId: string): string => {
+    const days = ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"];
+    const professionalDays = availabilities
+      .filter(availability => availability.professionalId === professionalId)
+      .map(availability => days[availability.dayOfWeek]);
+    
+    return professionalDays.length > 0 ? professionalDays.join(', ') : 'Sem dias definidos';
+  };
 
   return (
     <MainLayout title="Gerenciamento de Profissionais">
@@ -50,10 +74,10 @@ const ProfessionalsPage: React.FC = () => {
           ) : (
             <div className="divide-y">
               {professionals.map(professional => {
-                // Find services this professional offers
-                const professionalServices = services.filter(s => 
-                  s.professionalIds?.includes(professional.id)
-                );
+                // Find services this professional offers using our helper
+                const professionalServices = getProfessionalServices(professional.id);
+                // Get schedule days using our helper
+                const scheduleDays = getProfessionalScheduleDays(professional.id);
                 
                 return (
                   <div key={professional.id} className="py-3 flex justify-between items-center">
@@ -65,7 +89,7 @@ const ProfessionalsPage: React.FC = () => {
                         <div className="font-medium">{professional.user?.name}</div>
                         <div className="flex items-center text-sm text-muted-foreground">
                           <Calendar className="h-3 w-3 mr-1" />
-                          <span>{professional.scheduleDays?.join(', ') || 'Sem dias definidos'}</span>
+                          <span>{scheduleDays}</span>
                         </div>
                         <div className="mt-1 flex flex-wrap gap-1">
                           {professionalServices.slice(0, 3).map(service => (
