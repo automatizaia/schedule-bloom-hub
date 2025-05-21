@@ -64,9 +64,7 @@ const ProfessionalForm: React.FC<ProfessionalFormProps> = ({ isOpen, onClose }) 
       onClose();
     } catch (error) {
       console.error('Error creating professional:', error);
-      toast('Erro ao cadastrar profissional', {
-        variant: 'destructive'
-      });
+      toast('Erro ao cadastrar profissional');
     }
   };
   

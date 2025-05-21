@@ -73,15 +73,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setCompany(userCompany);
       localStorage.setItem('schedulerUser', JSON.stringify(foundUser));
       
-      toast({
-        title: "Login efetuado com sucesso",
-        description: `Bem-vindo, ${foundUser.name}!`,
-      });
+      toast("Login efetuado com sucesso! Bem-vindo, " + foundUser.name + "!");
     } catch (error) {
-      toast({
-        title: "Erro no login",
-        description: error instanceof Error ? error.message : "Ocorreu um erro durante o login",
-      });
+      toast("Erro no login: " + (error instanceof Error ? error.message : "Ocorreu um erro durante o login"));
       throw error;
     } finally {
       setLoading(false);
@@ -92,9 +86,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     setUser(null);
     setCompany(null);
     localStorage.removeItem('schedulerUser');
-    toast({
-      title: "Logout efetuado com sucesso",
-    });
+    toast("Logout efetuado com sucesso");
   };
   
   return (
