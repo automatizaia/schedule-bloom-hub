@@ -1,14 +1,25 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import MainLayout from '@/components/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { useScheduler } from '@/contexts/SchedulerContext';
 import { Users, UserPlus, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
+import ClientForm from '@/components/forms/ClientForm';
 
 const ClientsPage: React.FC = () => {
   const { clients } = useScheduler();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  
+  const filteredClients = searchTerm 
+    ? clients.filter(client => 
+        client.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (client.email && client.email.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (client.phone && client.phone.includes(searchTerm))
+      )
+    : clients;
 
   return (
     <MainLayout title="Gerenciamento de Clientes">
@@ -20,7 +31,7 @@ const ClientsPage: React.FC = () => {
             {clients.length} clientes cadastrados
           </span>
         </div>
-        <Button>
+        <Button onClick={() => setIsFormOpen(true)}>
           <UserPlus className="mr-2 h-4 w-4" />
           Novo Cliente
         </Button>
@@ -32,23 +43,32 @@ const ClientsPage: React.FC = () => {
             <span>Clientes Cadastrados</span>
             <div className="relative w-64">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Buscar cliente..." className="pl-8" />
+              <Input 
+                placeholder="Buscar cliente..." 
+                className="pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {clients.length === 0 ? (
+          {filteredClients.length === 0 ? (
             <div className="text-center py-10 text-muted-foreground">
               <Users className="h-10 w-10 mx-auto mb-2 opacity-30" />
-              <p>Nenhum cliente cadastrado</p>
-              <Button variant="outline" className="mt-4">
-                <UserPlus className="mr-2 h-4 w-4" />
-                Adicionar Primeiro Cliente
-              </Button>
+              <p>
+                {searchTerm ? 'Nenhum cliente encontrado para esta busca' : 'Nenhum cliente cadastrado'}
+              </p>
+              {!searchTerm && (
+                <Button variant="outline" className="mt-4" onClick={() => setIsFormOpen(true)}>
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Adicionar Primeiro Cliente
+                </Button>
+              )}
             </div>
           ) : (
             <div className="divide-y">
-              {clients.map(client => (
+              {filteredClients.map(client => (
                 <div key={client.id} className="py-3 flex justify-between items-center">
                   <div className="flex items-center">
                     <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
@@ -56,7 +76,10 @@ const ClientsPage: React.FC = () => {
                     </div>
                     <div className="ml-3">
                       <div className="font-medium">{client.name}</div>
-                      <div className="text-sm text-muted-foreground">{client.email}</div>
+                      <div className="text-sm text-muted-foreground">{client.email || 'Sem e-mail'}</div>
+                      {client.phone && (
+                        <div className="text-sm text-muted-foreground">{client.phone}</div>
+                      )}
                     </div>
                   </div>
                   <Button variant="ghost" size="sm">Ver detalhes</Button>
@@ -66,6 +89,8 @@ const ClientsPage: React.FC = () => {
           )}
         </CardContent>
       </Card>
+      
+      <ClientForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </MainLayout>
   );
 };

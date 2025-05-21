@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import MainLayout from '@/components/layouts/MainLayout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,9 +8,12 @@ import { Users, UserPlus, Search, Calendar } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Professional, Service } from '@/types/models';
+import ProfessionalForm from '@/components/forms/ProfessionalForm';
 
 const ProfessionalsPage: React.FC = () => {
   const { professionals, services, availabilities } = useScheduler();
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
 
   // Helper function to get the services a professional offers
   const getProfessionalServices = (professionalId: string): Service[] => {
@@ -34,6 +37,14 @@ const ProfessionalsPage: React.FC = () => {
     
     return professionalDays.length > 0 ? professionalDays.join(', ') : 'Sem dias definidos';
   };
+  
+  const filteredProfessionals = searchTerm 
+    ? professionals.filter(professional => 
+        professional.user?.name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+        (professional.bio && professional.bio.toLowerCase().includes(searchTerm.toLowerCase())) ||
+        (professional.specialties && professional.specialties.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())))
+      )
+    : professionals;
 
   return (
     <MainLayout title="Gerenciamento de Profissionais">
@@ -45,7 +56,7 @@ const ProfessionalsPage: React.FC = () => {
             {professionals.length} profissionais cadastrados
           </span>
         </div>
-        <Button>
+        <Button onClick={() => setIsFormOpen(true)}>
           <UserPlus className="mr-2 h-4 w-4" />
           Novo Profissional
         </Button>
@@ -57,23 +68,32 @@ const ProfessionalsPage: React.FC = () => {
             <span>Profissionais Cadastrados</span>
             <div className="relative w-64">
               <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input placeholder="Buscar profissional..." className="pl-8" />
+              <Input 
+                placeholder="Buscar profissional..." 
+                className="pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {professionals.length === 0 ? (
+          {filteredProfessionals.length === 0 ? (
             <div className="text-center py-10 text-muted-foreground">
               <Users className="h-10 w-10 mx-auto mb-2 opacity-30" />
-              <p>Nenhum profissional cadastrado</p>
-              <Button variant="outline" className="mt-4">
-                <UserPlus className="mr-2 h-4 w-4" />
-                Adicionar Primeiro Profissional
-              </Button>
+              <p>
+                {searchTerm ? 'Nenhum profissional encontrado para esta busca' : 'Nenhum profissional cadastrado'}
+              </p>
+              {!searchTerm && (
+                <Button variant="outline" className="mt-4" onClick={() => setIsFormOpen(true)}>
+                  <UserPlus className="mr-2 h-4 w-4" />
+                  Adicionar Primeiro Profissional
+                </Button>
+              )}
             </div>
           ) : (
             <div className="divide-y">
-              {professionals.map(professional => {
+              {filteredProfessionals.map(professional => {
                 // Find services this professional offers using our helper
                 const professionalServices = getProfessionalServices(professional.id);
                 // Get schedule days using our helper
@@ -113,6 +133,8 @@ const ProfessionalsPage: React.FC = () => {
           )}
         </CardContent>
       </Card>
+      
+      <ProfessionalForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
     </MainLayout>
   );
 };
