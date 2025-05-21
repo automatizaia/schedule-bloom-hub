@@ -49,9 +49,7 @@ const ClientForm: React.FC<ClientFormProps> = ({ isOpen, onClose }) => {
       onClose();
     } catch (error) {
       console.error('Error creating client:', error);
-      toast('Erro ao cadastrar cliente', {
-        variant: 'destructive'
-      });
+      toast('Erro ao cadastrar cliente');
     }
   };
   

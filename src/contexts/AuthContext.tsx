@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { User, Company } from '@/types/models';
 import { mockCompanies, mockUsers } from '@/data/mockData';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from '@/components/ui/sonner';
 
 interface AuthContextType {
   user: User | null;
@@ -27,7 +27,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [company, setCompany] = useState<Company | null>(null);
   const [loading, setLoading] = useState(true);
-  const { toast } = useToast();
   
   // Check for stored auth on mount
   useEffect(() => {
@@ -82,7 +81,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       toast({
         title: "Erro no login",
         description: error instanceof Error ? error.message : "Ocorreu um erro durante o login",
-        variant: "destructive",
       });
       throw error;
     } finally {
