@@ -7,11 +7,15 @@ import { useScheduler } from '@/contexts/SchedulerContext';
 import { Users, UserPlus, Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import ClientForm from '@/components/forms/ClientForm';
+import ClientDetails from '@/components/clients/ClientDetails';
+import { Client } from '@/types/models';
 
 const ClientsPage: React.FC = () => {
   const { clients } = useScheduler();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   
   const filteredClients = searchTerm 
     ? clients.filter(client => 
@@ -20,6 +24,11 @@ const ClientsPage: React.FC = () => {
         (client.phone && client.phone.includes(searchTerm))
       )
     : clients;
+
+  const handleViewDetails = (client: Client) => {
+    setSelectedClient(client);
+    setIsDetailsOpen(true);
+  };
 
   return (
     <MainLayout title="Gerenciamento de Clientes">
@@ -82,7 +91,13 @@ const ClientsPage: React.FC = () => {
                       )}
                     </div>
                   </div>
-                  <Button variant="ghost" size="sm">Ver detalhes</Button>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    onClick={() => handleViewDetails(client)}
+                  >
+                    Ver detalhes
+                  </Button>
                 </div>
               ))}
             </div>
@@ -91,6 +106,11 @@ const ClientsPage: React.FC = () => {
       </Card>
       
       <ClientForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      <ClientDetails 
+        client={selectedClient} 
+        open={isDetailsOpen} 
+        onClose={() => setIsDetailsOpen(false)} 
+      />
     </MainLayout>
   );
 };
