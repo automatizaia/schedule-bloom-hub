@@ -13,6 +13,7 @@ import PublicBookingPage from "./pages/PublicBookingPage";
 import ClientsPage from "./pages/ClientsPage";
 import ProfessionalsPage from "./pages/ProfessionalsPage";
 import SettingsPage from "./pages/SettingsPage";
+import NotificationsPage from "./pages/NotificationsPage";
 import NotFound from "./pages/NotFound";
 import PrivateRoute from "./components/PrivateRoute";
 
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="/clients" element={<ClientsPage />} />
                 <Route path="/professionals" element={<ProfessionalsPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/notifications" element={<NotificationsPage />} />
               </Route>
               
               {/* Redirect Root to Dashboard or Login */}
