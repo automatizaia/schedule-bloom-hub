@@ -9,11 +9,13 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { Professional, Service } from '@/types/models';
 import ProfessionalForm from '@/components/forms/ProfessionalForm';
+import ProfessionalDetails from '@/components/professionals/ProfessionalDetails';
 
 const ProfessionalsPage: React.FC = () => {
   const { professionals, services, availabilities } = useScheduler();
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
+  const [selectedProfessionalId, setSelectedProfessionalId] = useState<string | null>(null);
 
   // Helper function to get the services a professional offers
   const getProfessionalServices = (professionalId: string): Service[] => {
@@ -45,6 +47,10 @@ const ProfessionalsPage: React.FC = () => {
         (professional.specialties && professional.specialties.some(s => s.toLowerCase().includes(searchTerm.toLowerCase())))
       )
     : professionals;
+
+  const handleViewDetails = (id: string) => {
+    setSelectedProfessionalId(id);
+  };
 
   return (
     <MainLayout title="Gerenciamento de Profissionais">
@@ -125,7 +131,13 @@ const ProfessionalsPage: React.FC = () => {
                         </div>
                       </div>
                     </div>
-                    <Button variant="ghost" size="sm">Ver detalhes</Button>
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleViewDetails(professional.id)}
+                    >
+                      Ver detalhes
+                    </Button>
                   </div>
                 );
               })}
@@ -135,6 +147,14 @@ const ProfessionalsPage: React.FC = () => {
       </Card>
       
       <ProfessionalForm isOpen={isFormOpen} onClose={() => setIsFormOpen(false)} />
+      
+      {selectedProfessionalId && (
+        <ProfessionalDetails 
+          professionalId={selectedProfessionalId}
+          isOpen={!!selectedProfessionalId}
+          onClose={() => setSelectedProfessionalId(null)}
+        />
+      )}
     </MainLayout>
   );
 };

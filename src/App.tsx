@@ -12,6 +12,7 @@ import NewAppointmentPage from "./pages/NewAppointmentPage";
 import PublicBookingPage from "./pages/PublicBookingPage";
 import ClientsPage from "./pages/ClientsPage";
 import ProfessionalsPage from "./pages/ProfessionalsPage";
+import ServicesPage from "./pages/ServicesPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotificationsPage from "./pages/NotificationsPage";
 import NotFound from "./pages/NotFound";
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="/schedule/new" element={<NewAppointmentPage />} />
                 <Route path="/clients" element={<ClientsPage />} />
                 <Route path="/professionals" element={<ProfessionalsPage />} />
+                <Route path="/services" element={<ServicesPage />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />
               </Route>
