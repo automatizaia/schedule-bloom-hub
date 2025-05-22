@@ -63,13 +63,6 @@ const ClientDetails: React.FC<ClientDetailsProps> = ({ client, open, onClose }) 
                 </div>
               </div>
             )}
-            
-            {client.notes && (
-              <div className="border-t pt-3 mt-4">
-                <p className="text-sm font-medium mb-1">Observações</p>
-                <p className="text-sm">{client.notes}</p>
-              </div>
-            )}
           </div>
         </div>
         

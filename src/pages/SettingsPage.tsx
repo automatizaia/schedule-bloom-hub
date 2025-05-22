@@ -52,11 +52,11 @@ const SettingsPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="font-medium">Endereço</h3>
-                  <p>{company?.address || 'Não informado'}</p>
+                  <p>Não informado</p>
                 </div>
                 <div>
                   <h3 className="font-medium">Telefone</h3>
-                  <p>{company?.phone || 'Não informado'}</p>
+                  <p>Não informado</p>
                 </div>
                 {/* Outros dados da empresa serão exibidos aqui */}
               </div>
