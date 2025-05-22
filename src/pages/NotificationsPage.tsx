@@ -1,10 +1,9 @@
-
 import React, { useState } from 'react';
 import MainLayout from '@/components/layouts/MainLayout';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
-import { Bell, BellOff, WhatsApp } from 'lucide-react';
+import { Bell, BellOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import WhatsAppNotificationSetup from '@/components/notifications/WhatsAppNotificationSetup';
@@ -153,7 +152,12 @@ const NotificationsPage: React.FC = () => {
                   <div className="flex items-center space-x-2">
                     <Switch defaultChecked />
                     <Button variant="outline" size="sm" onClick={() => setActiveTab("whatsapp")}>
-                      <WhatsApp className="h-4 w-4 mr-1" /> Configurar
+                      <span className="bg-green-500 text-white p-1 rounded-full mr-1" style={{ width: 18, height: 18, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+                        </svg>
+                      </span>
+                      Configurar
                     </Button>
                   </div>
                 </div>

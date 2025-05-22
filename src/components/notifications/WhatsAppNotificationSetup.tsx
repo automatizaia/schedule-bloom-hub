@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { Check, WhatsApp } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -86,7 +86,11 @@ const WhatsAppNotificationSetup: React.FC = () => {
     <Card className="mb-6">
       <CardHeader>
         <CardTitle className="flex items-center">
-          <WhatsApp className="h-5 w-5 mr-2 text-green-500" />
+          <span className="bg-green-500 text-white p-1 rounded-full mr-2">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M3 21l1.65-3.8a9 9 0 1 1 3.4 2.9L3 21" />
+            </svg>
+          </span>
           Configuração do WhatsApp
         </CardTitle>
       </CardHeader>
@@ -138,7 +142,7 @@ const WhatsAppNotificationSetup: React.FC = () => {
                       <Input {...field} />
                     </FormControl>
                     <FormDescription>
-                      Use {{name}}, {{service}}, {{professional}}, {{date}}, {{time}} como variáveis
+                      Use {"{{name}}"}, {"{{service}}"}, {"{{professional}}"}, {"{{date}}"}, {"{{time}}"} como variáveis
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
